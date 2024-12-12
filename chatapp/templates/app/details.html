@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Popup</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- <script>
+        function handleSubmit(event) {
+            event.preventDefault(); 
+            const emailInput = document.getElementById("email").value;
+
+            if (emailInput) {
+                window.location.href = "http://127.0.0.1:8000/payment/"; 
+            } else {
+                alert("Please enter a valid email address.");
+            }
+        }
+    </script> -->
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen flex items-center justify-center">
+  
+    <div class="bg-white w-11/12 max-w-lg mx-auto rounded-lg shadow-2xl p-8 relative">
+       
+        <button onclick="window.history.back()" 
+            class="absolute top-3 right-3 text-gray-600 hover:text-gray-900 focus:outline-none">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+
+        <h2 class="text-3xl font-bold text-center text-gray-800">Enter Your Email</h2>
+        <p class="text-center text-gray-600 mt-2">We'll redirect you to the payment page</p>
+
+        <form method="post" class="mt-8 space-y-6" >
+            {% csrf_token %}
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
+                <input 
+                    id="email" 
+                    name="email" 
+                    type="email" 
+                    autocomplete="email" 
+                    required 
+                    placeholder="yourname@example.com"
+                    class="block w-full px-4 py-3 text-gray-900 bg-gray-100 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                >
+            </div>
+            <button 
+                type="submit"
+                class="w-full px-4 py-3 bg-blue-600 text-white font-bold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                Enter
+            </button>
+        </form>
+    </div>
+</body>
+</html>

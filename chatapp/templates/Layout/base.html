@@ -1,0 +1,84 @@
+<html lang="en">
+<head>
+    {% load static %}
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatapp</title>
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet"> 
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        // Timer countdown logic
+        document.addEventListener("DOMContentLoaded", function() {
+            let timerElement = document.getElementById("timer");
+            let timeRemaining = 5; // 2 minutes in seconds
+
+            const updateTimer = () => {
+                const minutes = Math.floor(timeRemaining / 60);
+                const seconds = timeRemaining % 60;
+                timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                if (timeRemaining > 0) {
+                    timeRemaining--;
+                } else {
+                    clearInterval(timerInterval);
+                    window.location.href = "http://127.0.0.1:8000/details/";
+                }
+            };
+
+            updateTimer(); // Initial call to display immediately
+            const timerInterval = setInterval(updateTimer, 1000);
+        });
+    </script>
+</head>
+
+<body class="bg-white text-gray-900 min-h-screen flex items-center justify-center">
+    <!-- Popup Container -->
+    <div class="bg-gray-100 w-11/12 max-w-3xl shadow-2xl rounded-lg overflow-hidden">
+        <!-- Timer Section -->
+        <div class="bg-blue-500 py-4 shadow-md text-center">
+            <h1 class="text-4xl font-bold text-white">Chat with Bot</h1>
+            <div id="timer" class="text-2xl font-mono mt-2 text-white-400"></div>
+        </div>
+
+        <!-- Chat Section -->
+        <div class="flex-grow flex flex-col p-6 space-y-4 overflow-y-auto h-64">
+            <!-- Chat Messages -->
+            <div class="flex justify-start">
+                <div class="bg-blue-600 p-4 rounded-lg max-w-md">
+                    <p class="text-white">Hello! How can I assist you today?</p>
+                </div>
+            </div>
+            <div class="flex justify-end">
+                <div class="bg-gray-700 p-4 rounded-lg max-w-md">
+                    <p class="text-white">I need help with my project!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Input Section -->
+        <div class="bg-blue-500 py-4 px-6">
+            <div class="flex items-center space-x-4">
+                <input 
+                    type="text" 
+                    placeholder="Type your message..." 
+                    class="flex-grow p-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                <button class="bg-sky-600 px-4 py-3 rounded-lg font-bold text-black hover:bg-blue-700">
+                    Send
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

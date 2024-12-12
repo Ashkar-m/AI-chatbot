@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Already Exists</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-r from-indigo-500 to-blue-500 min-h-screen flex items-center justify-center">
+
+    <!-- Container -->
+    <div class="bg-white p-8 rounded-lg shadow-lg max-w-md mx-auto">
+        <div class="text-center">
+            <!-- Warning Icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 text-yellow-500 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5h6M9 12h6M9 19h6M4 4v16h16V4H4z"/>
+            </svg>
+            <h1 class="text-3xl font-semibold text-gray-800 mt-4">Oops! Email Already Exists</h1>
+            <p class="text-gray-600 mt-2">The email you entered is already associated with an account. Please use a different email address.</p>
+        </div>
+
+        <div class="mt-4 text-center">
+            <!-- Back to Login Button -->
+            <a href="/details" class="text-blue-600 hover:underline">Change email</a>
+        </div>
+    </div>
+
+</body>
+</html>
