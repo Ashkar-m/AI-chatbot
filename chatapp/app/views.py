@@ -30,70 +30,70 @@ def details(request):
 
 stripe.api_key = settings.STRIPE_TEST_SECRET_KEY
 
-# def payment(request):
-#     if request.method == "POST":
-#         base_url = "http://127.0.0.1:8000/"
-#         checkout_session = stripe.checkout.Session.create(
-#             payment_method_types=['card'],
-#             line_items=[
-#                 {
-#                     'price_data': {
-#                         'currency': 'usd',
-#                         'product_data': {
-#                             'name': 'T-shirt',
-#                         },
-#                         'unit_amount': 2000, 
-#                     },
-#                     'quantity': 1,
-#                 },
-#             ],
-#             mode='payment',
-#             success_url=base_url + 'success/',
-#             cancel_url=base_url + 'cancel/',
-#         )
-
-#         # return JsonResponse({
-#         #     'id': checkout_session.id
-#         # })
-#         return JsonResponse({'id':checkout_session.id})
-#     return render(request, 'app/payment.html')
-
-
 def payment(request):
     if request.method == "POST":
         base_url = "http://127.0.0.1:8000/"
-
-        try:
-            # Create a Stripe Checkout session
-            checkout_session = stripe.checkout.Session.create(
-                payment_method_types=['card'],
-                line_items=[{
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[
+                {
                     'price_data': {
                         'currency': 'usd',
                         'product_data': {
                             'name': 'T-shirt',
                         },
-                        'unit_amount': 2000,  # $20.00 in cents
+                        'unit_amount': 2000, 
                     },
                     'quantity': 1,
-                }],
-                mode='payment',
-                success_url=base_url + 'success/',
-                cancel_url=base_url + 'cancel/',
-            )
+                },
+            ],
+            mode='payment',
+            success_url=base_url + 'success/',
+            cancel_url=base_url + 'cancel/',
+        )
 
-            return JsonResponse({
-                'id': checkout_session.id,
-                'client_secret': checkout_session.client_secret  # Return the client_secret here
-            })
-            print(checkout_session)
-        
-        except stripe.error.StripeError as e:
-            # Log the error to see the details
-            print(f"Stripe error: {e.user_message}")
-            return JsonResponse({'error': e.user_message}, status=400)
-
+        # return JsonResponse({
+        #     'id': checkout_session.id
+        # })
+        return JsonResponse({'id':checkout_session.id})
     return render(request, 'app/payment.html')
+
+
+# def payment(request):
+#     if request.method == "POST":
+#         base_url = "http://127.0.0.1:8000/"
+
+#         try:
+#             # Create a Stripe Checkout session
+#             checkout_session = stripe.checkout.Session.create(
+#                 payment_method_types=['card'],
+#                 line_items=[{
+#                     'price_data': {
+#                         'currency': 'usd',
+#                         'product_data': {
+#                             'name': 'T-shirt',
+#                         },
+#                         'unit_amount': 2000,  # $20.00 in cents
+#                     },
+#                     'quantity': 1,
+#                 }],
+#                 mode='payment',
+#                 success_url=base_url + 'success/',
+#                 cancel_url=base_url + 'cancel/',
+#             )
+
+#             return JsonResponse({
+#                 'id': checkout_session.id,
+#                 'client_secret': checkout_session.client_secret  # Return the client_secret here
+#             })
+#             print(checkout_session)
+        
+#         except stripe.error.StripeError as e:
+#             # Log the error to see the details
+#             print(f"Stripe error: {e.user_message}")
+#             return JsonResponse({'error': e.user_message}, status=400)
+
+#     return render(request, 'app/payment.html')
 
 
 def create_payment_intent(request):
