@@ -142,3 +142,9 @@ STRIPE_TEST_SECRET_KEY = 'sk_test_51QV6ZtIqpMVb5nWecYRXgtp0OeIxWp5CQWzCsv7r0wqH6
 
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",  # React app
+    "http://127.0.0.1:8000",  # Django app
+]
+
