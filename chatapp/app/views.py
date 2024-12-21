@@ -119,3 +119,23 @@ def cancel(request):
 
 def email_exists(request):
     return render(request, 'app/email_exists.html')
+
+class CreateChatRoom(APIView):
+    permission_classes=[permissions.IsAuthenticated]
+    serializer_class = RoomSerializer
+
+    def post(self,request,pk):
+        current_user = request.user
+        other_user = UserModel.objects.get(pk=pk)
+
+        existing_chat_rooms = Room.objects.filter(members = current_user).filter(members = other_user)
+        if existing_chat_rooms.exists():
+            serializer = RoomSerializer(existing_chat_rooms.first())
+            return Response(serializer.data,status=status.HTTP_200_OK)
+
+        chat_room = Room()
+        chat_room.save()
+        chat_room.members.add(current_user,other_user)
+
+        serializer = RoomSerializer(chat_room)
+        return Response(serializer.data,status=status.HTTP_201_CREATED)
