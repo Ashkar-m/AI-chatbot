@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Payment</h2>
+<form id="payment-form">
+    <div id="card-element"></div>
+    <button id="submit">Pay $50</button>
+</form>
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    const stripe = Stripe("{{ key }}");
+    const elements = stripe.elements();
+    const cardElement = elements.create("card");
+    cardElement.mount("#card-element");
+
+    document.getElementById("payment-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const { error, paymentMethod } = await stripe.createPaymentMethod({
+            type: "card",
+            card: cardElement,
+        });
+        if (error) {
+            alert(error.message);
+        } else {
+            const response = await fetch("/payment", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ payment_method_id: paymentMethod.id }),
+            });
+            window.location.href = response.url;
+        }
+    });
+</script>
+{% endblock %}

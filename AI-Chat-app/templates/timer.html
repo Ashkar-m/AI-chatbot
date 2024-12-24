@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Timer</h2>
+<p id="timer">10</p>
+<script>
+    let countdown = 10;
+    const timerElement = document.getElementById("timer");
+    const interval = setInterval(() => {
+        countdown--;
+        timerElement.textContent = countdown;
+        if (countdown === 0) {
+            clearInterval(interval);
+            window.location.href = "{{ url_for('email_page') }}";
+        }
+    }, 1000);
+</script>
+{% endblock %}
