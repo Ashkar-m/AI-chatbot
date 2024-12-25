@@ -6,6 +6,8 @@ from flask_bcrypt import Bcrypt
 import stripe
 from flask_migrate import Migrate
 from flask_bootstrap import Bootstrap
+from flask import jsonify
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24).hex()
@@ -88,23 +90,104 @@ def email_page():
         return redirect(url_for("payment"))
     return render_template("email.html", email=session.get("email", ""))
 
-@app.route("/payment", methods=["GET", "POST"])
+# @app.route("/payment", methods=["GET", "POST"])
+# @login_required
+# def payment():
+#     if request.method == "POST":
+#         try:
+#             intent = stripe.PaymentIntent.create(
+#                 amount=5000,  # $50.00
+#                 currency="usd",
+#                 payment_method=request.form["payment_method_id"],
+#                 confirm=True,
+#             )
+#             if intent["status"] == "succeeded":
+#                 return redirect(url_for("success"))
+#         except stripe.error.CardError as e:
+#             flash(f"Payment failed: {e.error.message}", "danger")
+#             return redirect(url_for("failure"))
+#     return render_template("payment.html", key=PUBLISHABLE_KEY)
+
+# @app.route("/success")
+# @login_required
+# def success():
+#     return render_template("success.html")
+
+# @app.route("/failure")
+# @login_required
+# def failure():
+#     return render_template("failure.html")
+
+# @app.route("/payment", methods=["GET", "POST"])
+# @login_required
+# def payment():
+#     if request.method == "POST":
+#         try:
+#             # Create a Stripe Checkout session
+#             session = stripe.checkout.Session.create(
+#                 payment_method_types=['card'],
+#                 line_items=[
+#                     {
+#                         'price_data': {
+#                             'currency': 'usd',
+#                             'product_data': {
+#                                 'name': 'Test Product',
+#                             },
+#                             'unit_amount': 5000,  # Amount in cents
+#                         },
+#                         'quantity': 1,
+#                     },
+#                 ],
+#                 mode='payment',
+#                 success_url=url_for("success", _external=True),
+#                 cancel_url=url_for("failure", _external=True),
+#             )
+#             # Redirect to Stripe Checkout
+#             return jsonify({'id': session.id})
+
+#         except Exception as e:
+#             flash(f"Payment failed: {e}", "danger")
+#             return redirect(url_for("failure"))
+
+#     return render_template("payment.html", key=PUBLISHABLE_KEY)
+
+@app.route("/payment", methods=["POST","GET"])
 @login_required
 def payment():
     if request.method == "POST":
         try:
-            intent = stripe.PaymentIntent.create(
-                amount=5000,  # $50.00
-                currency="usd",
-                payment_method=request.form["payment_method_id"],
-                confirm=True,
+            # Create a Stripe Checkout session
+            session = stripe.checkout.Session.create(
+                payment_method_types=['card'],
+                line_items=[{
+                    'price_data': {
+                        'currency': 'usd',
+                        'product_data': {'name': 'Test Product'},
+                        'unit_amount': 5000,  # Amount in cents ($50)
+                    },
+                    'quantity': 1,
+                }],
+                mode='payment',
+                success_url=url_for("success", _external=True),
+                cancel_url=url_for("failure", _external=True),
             )
-            if intent["status"] == "succeeded":
-                return redirect(url_for("success"))
-        except stripe.error.CardError as e:
-            flash(f"Payment failed: {e.error.message}", "danger")
+            # Return the session ID to the frontend
+            return jsonify({'id': session.id})
+
+        except stripe.error.StripeError as e:
+            # Log the error details to understand what went wrong
+            print(f"Stripe Error: {e}")
+            flash(f"Payment failed: {e.user_message}", "danger")
             return redirect(url_for("failure"))
+
+        except Exception as e:
+            # Handle any other unexpected errors
+            print(f"Unexpected Error: {e}")
+            flash("An unexpected error occurred. Please try again.", "danger")
+            return redirect(url_for("failure"))
+
     return render_template("payment.html", key=PUBLISHABLE_KEY)
+
 
 @app.route("/success")
 @login_required

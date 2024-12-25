@@ -1,4 +1,6 @@
-{% extends 'base.html' %}
+
+
+ {% extends 'base.html' %}
 
 {% block content %}
 <div class="container mt-5">
@@ -8,7 +10,6 @@
                 <div class="card-body">
                     <h2 class="card-title text-center mb-4">Payment</h2>
                     <form id="payment-form" class="text-center">
-                        <div id="card-element" class="form-control mb-4"></div>
                         <button id="submit" class="btn btn-success btn-lg w-100">Pay $50</button>
                     </form>
                 </div>
@@ -19,26 +20,35 @@
 
 <script src="https://js.stripe.com/v3/"></script>
 <script>
-    const stripe = Stripe("{{ key }}");
-    const elements = stripe.elements();
-    const cardElement = elements.create("card");
-    cardElement.mount("#card-element");
+    const stripe = Stripe("pk_test_51QV6ZtIqpMVb5nWenzdEG2jpLAF9KuRngPXgiX09m07cVDoGxLVmKnocHZuLSaW7gfOwiw1N3VJ77CtNzZUaqIko00n2xNTnsh");
 
     document.getElementById("payment-form").addEventListener("submit", async (e) => {
         e.preventDefault();
-        const { error, paymentMethod } = await stripe.createPaymentMethod({
-            type: "card",
-            card: cardElement,
+
+        // Send a POST request to create the Stripe Checkout session
+        const response = await fetch("/payment", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({})  // Send any data needed for the payment here
         });
-        if (error) {
-            alert(error.message);
-        } else {
-            const response = await fetch("/payment", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ payment_method_id: paymentMethod.id }),
+
+        // Ensure response is valid
+        if (!response.ok) {
+            alert("Error creating payment session. Please try again.");
+            return;
+        }
+
+        const session = await response.json();
+
+        if (session.id) {
+            // Redirect the user to Stripe Checkout
+            stripe.redirectToCheckout({ sessionId: session.id }).then(function (result) {
+                if (result.error) {
+                    alert(result.error.message);  // Show an error message if there's an issue
+                }
             });
-            window.location.href = response.url;
+        } else {
+            alert("Error creating checkout session.");
         }
     });
 </script>
