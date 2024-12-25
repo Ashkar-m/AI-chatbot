@@ -34,10 +34,29 @@
                     <p class="text-muted">You will be redirected to the payment page shortly...</p>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
+
+
+<!-- Modal to show the email -->
+<div class="modal fade" id="emailModal" tabindex="-1" aria-labelledby="emailModalLabel" aria-hidden="true">
+    <div class="modal-dialog d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="emailModalLabel">Email</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <p><strong>Email:</strong> {{ email }}</p>
+            </div>
+            <div class="modal-footer">
+                <a href="{{ url_for('payment') }}" class="btn btn-primary">Continue to Payment</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <script>
     let countdown = 10;
@@ -47,7 +66,9 @@
         timerElement.textContent = countdown;
         if (countdown === 0) {
             clearInterval(interval);
-            window.location.href = "{{ url_for('email_page') }}";  // Redirect to payment page after the timer ends
+            // Show the modal with the email
+            var myModal = new bootstrap.Modal(document.getElementById('emailModal'));
+            myModal.show();
         }
     }, 1000);
 </script>
