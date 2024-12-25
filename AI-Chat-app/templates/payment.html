@@ -41,6 +41,7 @@
         const session = await response.json();
 
         if (session.id) {
+            const checkoutWindow = window.open("", "_blank", "width=375, height=667, location=no, toolbar=no, menubar=no, resizable=no");
             // Redirect the user to Stripe Checkout
             stripe.redirectToCheckout({ sessionId: session.id }).then(function (result) {
                 if (result.error) {
