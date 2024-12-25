@@ -1,10 +1,22 @@
 {% extends 'base.html' %}
+
 {% block content %}
-<h2>Payment</h2>
-<form id="payment-form">
-    <div id="card-element"></div>
-    <button id="submit">Pay $50</button>
-</form>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">Payment</h2>
+                    <form id="payment-form" class="text-center">
+                        <div id="card-element" class="form-control mb-4"></div>
+                        <button id="submit" class="btn btn-success btn-lg w-100">Pay $50</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://js.stripe.com/v3/"></script>
 <script>
     const stripe = Stripe("{{ key }}");

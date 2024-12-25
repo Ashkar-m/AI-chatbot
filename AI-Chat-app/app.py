@@ -4,11 +4,17 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 import os
 from flask_bcrypt import Bcrypt
 import stripe
+from flask_migrate import Migrate
+from flask_bootstrap import Bootstrap
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24).hex()
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:2000@localhost:5432/chatapp'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:2000@localhost:5432/chat'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+Bootstrap(app)
+
 stripe.api_key = "sk_test_51QV6ZtIqpMVb5nWecYRXgtp0OeIxWp5CQWzCsv7r0wqH6J3hXEax1Ja0sqn7hoBM9BHvV6nMuBl1rh5sthGqE1l400tPh2r0W0"
 PUBLISHABLE_KEY = "pk_test_51QV6ZtIqpMVb5nWenzdEG2jpLAF9KuRngPXgiX09m07cVDoGxLVmKnocHZuLSaW7gfOwiw1N3VJ77CtNzZUaqIko00n2xNTnsh"
 bcrypt = Bcrypt(app)
@@ -109,7 +115,6 @@ def failure():
     return render_template("failure.html")
 
 if __name__ == "__main__":
-    db.create_all()
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)
-
-    

@@ -1,8 +1,19 @@
 {% extends 'base.html' %}
+
 {% block content %}
-<h2>Email Page</h2>
-<p>Email: {{ email }}</p>
-<form method="POST">
-    <button type="submit">Continue to Payment</button>
-</form>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">Email Page</h2>
+                    <p class="text-center"><strong>Email:</strong> {{ email }}</p>
+                    <form method="POST" class="text-center">
+                        <button type="submit" class="btn btn-primary btn-lg">Continue to Payment</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -1,7 +1,20 @@
 {% extends 'base.html' %}
+
 {% block content %}
-<h2>Timer</h2>
-<p id="timer">10</p>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow text-center">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">Timer</h2>
+                    <p id="timer" class="display-4 text-primary">10</p>
+                    <p class="text-muted">You will be redirected shortly...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     let countdown = 10;
     const timerElement = document.getElementById("timer");
