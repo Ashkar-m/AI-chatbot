@@ -58,24 +58,26 @@
 </div>
 
 
-<!-- Modal to show success message -->
+<!-- Modal to show the success message -->
 <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
     <div class="modal-dialog d-flex justify-content-center align-items-center" style="min-height: 100vh;">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="successModalLabel">Payment Status</h5>
+                <h5 class="modal-title" id="successModalLabel">Payment Successful</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body text-center">
-                <p><strong>Your payment Successfull</strong></p>
+                <p><strong>Email:</strong> {{ email }}</p>
+                <p>Your payment was successful. Thank you for your purchase!</p>
             </div>
             <div class="modal-footer">
-                <!-- Button to trigger the payment modal -->
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="/timer">Continue to Chat</button>
+                <!-- You can add a button to close the modal or redirect the user elsewhere if needed -->
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
+
 
 <!-- Payment Modal -->
 <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
@@ -131,7 +133,11 @@
             const result = await response.json();
             
             if (result.success) {
-                window.location.href= "/success";
+                const paymentModal = bootstrap.Modal.getInstance(document.getElementById('paymentModal'));
+                paymentModal.hide();
+
+                var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+                successModal.show();
             } else {
                 window.location.href = "/failure";  // Redirect to the failure page
             }
@@ -140,7 +146,7 @@
     
 </script>
 
-<script>
+<!-- <script>
     let countdown = 10;
     const timerElement = document.getElementById("timer");
     const interval = setInterval(() => {
@@ -153,6 +159,38 @@
             myModal.show();
         }
     }, 1000);
+</script> -->
+
+
+<script>
+    let countdown = 10;
+    const timerElement = document.getElementById("timer");
+    let interval;
+
+    // Function to start/restart the timer
+    function startTimer() {
+        countdown = 10;
+        timerElement.textContent = countdown;
+        interval = setInterval(() => {
+            countdown--;
+            timerElement.textContent = countdown;
+            if (countdown === 0) {
+                clearInterval(interval);
+                // Show the modal with the email
+                var myModal = new bootstrap.Modal(document.getElementById('emailModal'));
+                myModal.show();
+            }
+        }, 1000);
+    }
+
+    // Listen for the close event of the success modal
+    document.getElementById('successModal').addEventListener('hide.bs.modal', () => {
+        // Restart the timer
+        startTimer();
+    });
+
+    // Start the initial timer
+    startTimer();
 </script>
 
 <style>
