@@ -44,19 +44,100 @@
     <div class="modal-dialog d-flex justify-content-center align-items-center" style="min-height: 100vh;">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="emailModalLabel">Email</h5>
+                <h5 class="modal-title" id="emailModalLabel">Payment Status</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <p><strong>Your payment Successfull</strong></p>
+            </div>
+            <div class="modal-footer">
+                <!-- Button to trigger the payment modal -->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="/timer">Continue to Chat</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Payment Modal -->
+<div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+    <div class="modal-dialog d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="paymentModalLabel">Payment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="payment-form" method="POST" action="{{ url_for('payment') }}">
+                    <div id="card-element"></div>
+                    <div id="card-errors" role="alert"></div>
+                    <button id="submit" class="btn btn-success btn-lg w-100 mt-4">Pay $50</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal to show the success message -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successModalLabel">Email</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body text-center">
                 <p><strong>Email:</strong> {{ email }}</p>
             </div>
             <div class="modal-footer">
-                <a href="{{ url_for('payment') }}" class="btn btn-primary">Continue to Payment</a>
+                <!-- Button to trigger the payment modal -->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#paymentModal">Continue to Payment</button>
             </div>
         </div>
     </div>
 </div>
 
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    const stripe = Stripe("pk_test_51QV6ZtIqpMVb5nWenzdEG2jpLAF9KuRngPXgiX09m07cVDoGxLVmKnocHZuLSaW7gfOwiw1N3VJ77CtNzZUaqIko00n2xNTnsh");
+    const elements = stripe.elements();
+
+    // Create an instance of the card Element
+    const card = elements.create("card");
+
+    // Mount the card Element to the DOM
+    card.mount("#card-element");
+
+    document.getElementById("payment-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        
+        const {token, error} = await stripe.createToken(card);
+        
+        if (error) {
+            // Show the error message in the DOM
+            const errorElement = document.getElementById("card-errors");
+            errorElement.textContent = error.message;
+        } else {
+            // Send the token to your server for further processing
+            const response = await fetch("/payment", {
+                method: "POST",  // Make sure this is 'POST'
+                headers: { 
+                    "Content-Type": "application/json"  // Ensure the content type is 'application/json'
+                },
+                body: JSON.stringify({ token: token.id })  // Send the payment token to the backend
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                window.location.href = "/success";  // Redirect to the success page
+            } else {
+                window.location.href = "/failure";  // Redirect to the failure page
+            }
+        }
+    });
+    
+</script>
 
 <script>
     let countdown = 10;
