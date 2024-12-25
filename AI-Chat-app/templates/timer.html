@@ -4,13 +4,37 @@
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <div class="card shadow text-center">
+            <!-- Dummy Chat Section -->
+            <div class="card shadow mb-4">
                 <div class="card-body">
-                    <h2 class="card-title mb-4">Timer</h2>
-                    <p id="timer" class="display-4 text-primary">10</p>
-                    <p class="text-muted">You will be redirected shortly...</p>
+                    <h4 class="card-title text-center mb-4">Chat with AI</h4>
+                    <!-- Displaying some dummy chat messages -->
+                    <div class="chat-box" style="max-height: 300px; overflow-y: auto; padding-right: 10px;">
+                        <div class="message ai-message">
+                            <strong>AI:</strong> Hello! How can I assist you today?
+                        </div>
+                        <div class="message user-message">
+                            <strong>You:</strong> I need some help with my project.
+                        </div>
+                        <div class="message ai-message">
+                            <strong>AI:</strong> I'd be happy to help. What specifically would you like assistance with?
+                        </div>
+                        <div class="message user-message">
+                            <strong>You:</strong> I need help with payment integration.
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            <!-- Timer Section -->
+            <div class="card shadow mb-4">
+                <div class="card-body text-center">
+                    <h2 class="card-title mb-4">Your Free Time is About to Expire</h2>
+                    <p id="timer" class="display-4 text-primary mb-3">10</p>
+                    <p class="text-muted">You will be redirected to the payment page shortly...</p>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
@@ -23,8 +47,40 @@
         timerElement.textContent = countdown;
         if (countdown === 0) {
             clearInterval(interval);
-            window.location.href = "{{ url_for('email_page') }}";
+            window.location.href = "{{ url_for('email_page') }}";  // Redirect to payment page after the timer ends
         }
     }, 1000);
 </script>
+
+<style>
+    .chat-box {
+        background-color: #f7f7f7;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+
+    .message {
+        margin-bottom: 15px;
+        padding: 10px;
+        border-radius: 10px;
+        font-size: 16px;
+    }
+
+    .ai-message {
+        background-color: #e1f7d5;
+        text-align: left;
+    }
+
+    .user-message {
+        background-color: #d9e8ff;
+        text-align: right;
+    }
+
+    #timer {
+        font-size: 3rem;
+        font-weight: bold;
+        color: #ff6347;
+    }
+</style>
 {% endblock %}

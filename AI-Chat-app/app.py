@@ -59,6 +59,8 @@ def login():
 
         if user and bcrypt.check_password_hash(user.password, password):
             login_user(user)
+            session["email"] = user.email
+            print(user.email)
             return redirect(url_for("timer"))
         flash("Invalid credentials!", "danger")
     return render_template("login.html")

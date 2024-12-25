@@ -2,24 +2,41 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h2 class="mb-4">Login</h2>
-    <form method="POST" class="needs-validation" novalidate>
-        <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required>
-            <div class="invalid-feedback">
-                Please enter a valid email address.
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <!-- Card to hold the form -->
+            <div class="card shadow-lg">
+                <div class="card-body">
+                    <h2 class="text-center mb-4">Login</h2>
+
+                    <!-- Login Form -->
+                    <form method="POST" class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required>
+                            <div class="invalid-feedback">
+                                Please enter a valid email address.
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required>
+                            <div class="invalid-feedback">
+                                Please enter your password.
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block">Login</button>
+
+                        <div class="text-center mt-3">
+                            <p class="mb-0">Don't have an account? <a href="/signup" class="text-primary">Sign up</a></p>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-        <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required>
-            <div class="invalid-feedback">
-                Please enter your password.
-            </div>
-        </div>
-        <button type="submit" class="btn btn-primary">Login</button>
-    </form>
+    </div>
 </div>
 
 <script>
@@ -38,4 +55,58 @@
         });
     })();
 </script>
+
+<style>
+    /* Card Style */
+    .card {
+        border-radius: 15px;
+        background-color: #f8f9fa;
+    }
+
+    /* Button Style */
+    .btn-primary {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+    }
+
+    /* Input Field Style */
+    .form-control {
+        border-radius: 10px;
+        border-color: #ced4da;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+
+    /* Form Title Style */
+    .card-title {
+        font-size: 30px;
+        font-weight: bold;
+        color: #343a40;
+    }
+
+    /* Remember Me Style */
+    .form-check-label {
+        font-size: 14px;
+    }
+
+    /* Link Style */
+    .text-primary {
+        text-decoration: none;
+    }
+
+    .text-primary:hover {
+        text-decoration: underline;
+    }
+
+    /* Adding Shadows and Padding */
+    .card-body {
+        padding: 30px;
+    }
+</style>
+
 {% endblock %}
