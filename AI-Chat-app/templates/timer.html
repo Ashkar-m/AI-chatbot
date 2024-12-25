@@ -38,13 +38,32 @@
     </div>
 </div>
 
-
 <!-- Modal to show the email -->
 <div class="modal fade" id="emailModal" tabindex="-1" aria-labelledby="emailModalLabel" aria-hidden="true">
     <div class="modal-dialog d-flex justify-content-center align-items-center" style="min-height: 100vh;">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="emailModalLabel">Payment Status</h5>
+                <h5 class="modal-title" id="emailModalLabel">Email</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <p><strong>Email:</strong> {{ email }}</p>
+            </div>
+            <div class="modal-footer">
+                <!-- Button to trigger the payment modal -->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#paymentModal">Continue to Payment</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal to show success message -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successModalLabel">Payment Status</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body text-center">
@@ -78,24 +97,6 @@
 </div>
 
 
-<!-- Modal to show the success message -->
-<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-    <div class="modal-dialog d-flex justify-content-center align-items-center" style="min-height: 100vh;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="successModalLabel">Email</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body text-center">
-                <p><strong>Email:</strong> {{ email }}</p>
-            </div>
-            <div class="modal-footer">
-                <!-- Button to trigger the payment modal -->
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#paymentModal">Continue to Payment</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <script src="https://js.stripe.com/v3/"></script>
 <script>
@@ -130,7 +131,7 @@
             const result = await response.json();
             
             if (result.success) {
-                window.location.href = "/success";  // Redirect to the success page
+                window.location.href= "/success";
             } else {
                 window.location.href = "/failure";  // Redirect to the failure page
             }
