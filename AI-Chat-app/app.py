@@ -91,42 +91,78 @@ def email_page():
 
 
 
-@app.route("/payment", methods=["POST","GET"])
+# @app.route("/payment", methods=["POST","GET"])
+# @login_required
+# def payment():
+#     if request.method == "POST":
+#         try:
+#             # Create a Stripe Checkout session
+#             session = stripe.checkout.Session.create(
+#                 payment_method_types=['card'],
+#                 line_items=[{
+#                     'price_data': {
+#                         'currency': 'usd',
+#                         'product_data': {'name': 'Test Product'},
+#                         'unit_amount': 5000,  # Amount in cents ($50)
+#                     },
+#                     'quantity': 1,
+#                 }],
+#                 mode='payment',
+#                 success_url=url_for("success", _external=True),
+#                 cancel_url=url_for("failure", _external=True),
+#             )
+#             # Return the session ID to the frontend
+#             return jsonify({'id': session.id})
+
+#         except stripe.error.StripeError as e:
+#             # Log the error details to understand what went wrong
+#             print(f"Stripe Error: {e}")
+#             flash(f"Payment failed: {e.user_message}", "danger")
+#             return redirect(url_for("failure"))
+
+#         except Exception as e:
+#             # Handle any other unexpected errors
+#             print(f"Unexpected Error: {e}")
+#             flash("An unexpected error occurred. Please try again.", "danger")
+#             return redirect(url_for("failure"))
+
+#     return render_template("payment.html", key=PUBLISHABLE_KEY)
+
+@app.route("/payment", methods=["POST", "GET"])
 @login_required
 def payment():
-    if request.method == "POST":
+    if request.method == "GET":
+        # Render the payment page (payment form)
+        return render_template('payment.html')
+    elif request.method == "POST":
+        # Handle payment submission
         try:
-            # Create a Stripe Checkout session
-            session = stripe.checkout.Session.create(
-                payment_method_types=['card'],
-                line_items=[{
-                    'price_data': {
-                        'currency': 'usd',
-                        'product_data': {'name': 'Test Product'},
-                        'unit_amount': 5000,  # Amount in cents ($50)
-                    },
-                    'quantity': 1,
-                }],
-                mode='payment',
-                success_url=url_for("success", _external=True),
-                cancel_url=url_for("failure", _external=True),
-            )
-            # Return the session ID to the frontend
-            return jsonify({'id': session.id})
+            # Ensure request contains JSON data
+            data = request.get_json()
 
-        except stripe.error.StripeError as e:
-            # Log the error details to understand what went wrong
-            print(f"Stripe Error: {e}")
-            flash(f"Payment failed: {e.user_message}", "danger")
-            return redirect(url_for("failure"))
+            if not data:
+                return jsonify({'success': False, 'error': 'Invalid JSON'}), 400
+
+            token = data.get('token')
+
+            if not token:
+                return jsonify({'success': False, 'error': 'No token provided'}), 400
+
+            # Process payment logic
+            charge = stripe.Charge.create(
+                amount=5000,  # Example amount ($50)
+                currency="usd",
+                source=token,
+                description="Test Product"
+            )
+
+            if charge.status == "succeeded":
+                return jsonify({'success': True})
+            else:
+                return jsonify({'success': False, 'error': 'Payment failed'}), 400
 
         except Exception as e:
-            # Handle any other unexpected errors
-            print(f"Unexpected Error: {e}")
-            flash("An unexpected error occurred. Please try again.", "danger")
-            return redirect(url_for("failure"))
-
-    return render_template("payment.html", key=PUBLISHABLE_KEY)
+            return jsonify({'success': False, 'error': str(e)}), 500
 
 
 @app.route("/success")
