@@ -108,7 +108,10 @@ def payment():
                 return jsonify({'success': False, 'error': 'No token provided'}), 400
 
             # Process payment logic
+            # current_email = request.session.get('email')
+            # print(current_email)
             charge = stripe.Charge.create(
+                # receipt_email=current_email,
                 amount=5000,  # Example amount ($50)
                 currency="usd",
                 source=token,

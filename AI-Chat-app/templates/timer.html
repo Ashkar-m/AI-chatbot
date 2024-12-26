@@ -146,97 +146,7 @@
     
 </script>
 
-<!-- <script>
-    let countdown = 10;
-    const timerElement = document.getElementById("timer");
-    const interval = setInterval(() => {
-        countdown--;
-        timerElement.textContent = countdown;
-        if (countdown === 0) {
-            clearInterval(interval);
-            // Show the modal with the email
-            var myModal = new bootstrap.Modal(document.getElementById('emailModal'));
-            myModal.show();
-        }
-    }, 1000);
-</script> -->
-
-
-<!-- <script>
-    let countdown = 10;
-    const timerElement = document.getElementById("timer");
-    let interval;
-
-    // Function to start/restart the timer
-    function startTimer() {
-        countdown = 10;
-        timerElement.textContent = countdown;
-        interval = setInterval(() => {
-            countdown--;
-            timerElement.textContent = countdown;
-            if (countdown === 0) {
-                clearInterval(interval);
-                // Show the modal with the email
-                var myModal = new bootstrap.Modal(document.getElementById('emailModal'));
-                myModal.show();
-            }
-        }, 1000);
-    }
-
-    // Listen for the close event of the success modal
-    document.getElementById('successModal').addEventListener('hide.bs.modal', () => {
-        // Restart the timer
-        startTimer();
-    });
-
-    // Start the initial timer
-    startTimer();
-</script> -->
-
-
-<!-- <script>
-    let countdown = 10;
-    const timerElement = document.getElementById("timer");
-    let interval;
-    let emailShown = false; // To track if the email modal has been displayed
-
-    // Function to start/restart the timer
-    function startTimer() {
-        countdown = 10;
-        timerElement.textContent = countdown;
-        interval = setInterval(() => {
-            countdown--;
-            timerElement.textContent = countdown;
-            if (countdown === 0) {
-                clearInterval(interval);
-
-                if (!emailShown) {
-                    // Show the email modal and mark it as shown
-                    emailShown = true;
-                    var emailModal = new bootstrap.Modal(document.getElementById('emailModal'));
-                    emailModal.show();
-
-                    // Restart the timer for the additional 10 seconds
-                    startTimer();
-                } else {
-                    // If the email modal was already shown, proceed to payment modal
-                    var paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'));
-                    paymentModal.show();
-                }
-            }
-        }, 1000);
-    }
-
-    // Listen for the close event of the success modal
-    document.getElementById('successModal').addEventListener('hide.bs.modal', () => {
-        // Restart the timer if needed (not required for the current flow)
-        startTimer();
-    });
-
-    // Start the initial timer
-    startTimer();
-</script> -->
-
+<!-- 
 <script>
 let countdown = 10;
 const timerElement = document.getElementById("timer");
@@ -277,6 +187,57 @@ function startTimer() {
 
 // Start the timer when the page loads
 startTimer();
+</script> -->
+
+<script>
+    let countdown = 10;
+const timerElement = document.getElementById("timer");
+let interval;
+let emailShown = false; // To track if the email modal has been displayed
+
+// Function to start/restart the timer
+function startTimer() {
+    countdown = 10;
+    timerElement.textContent = countdown;
+
+    interval = setInterval(() => {
+        countdown--;
+        timerElement.textContent = countdown;
+
+        if (countdown === 0) {
+            clearInterval(interval);
+
+            if (!emailShown) {
+                // Show the email modal
+                emailShown = true;
+                const emailModal = new bootstrap.Modal(document.getElementById('emailModal'));
+                emailModal.show();
+
+                // Add an event listener to the close button in the email modal
+                document.getElementById('emailModal').addEventListener('hide.bs.modal', () => {
+                    // Restart the timer for an additional 10 seconds
+                    startTimer();
+                });
+            } else {
+                // If email modal has already been shown, proceed to payment modal
+                const paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'));
+                paymentModal.show();
+            }
+        }
+    }, 1000);
+}
+
+// Start the timer when the page loads
+startTimer();
+
+// Add event listener to the success modal to add 10 seconds and restart the timer
+document.getElementById("successModal").addEventListener("hide.bs.modal", () => {
+    // Add 10 seconds and restart the timer
+    countdown = 10; // Reset the countdown to 10 seconds
+    emailShown = false; // Allow email modal to be shown again if necessary
+    startTimer(); // Restart the timer
+});
+
 </script>
 
 <style>
